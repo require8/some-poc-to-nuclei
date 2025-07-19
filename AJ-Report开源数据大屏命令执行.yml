@@ -2,7 +2,7 @@ id: dataSetParam-verification-exploit
 
 info:
   name: AJ-Report开源数据大屏存在远程命令执行漏洞
-  author: ProjectDiscoveryAI
+  author: ProjectDiscoveryAI, dostghost
   severity: critical
   description: |
     该平台可以通过post方式在validationRules参数对应值中进行命令执行,可以获得服务器权限,登陆管理后台接管大屏。
