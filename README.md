@@ -3,3 +3,5 @@
 把一些poc转换为nuclei的yml模板
 # POC来源链接
 https://github.com/AboSteam/POPC/blob/main
+# 工具
+[Nuclei-AI](https://cloud.projectdiscovery.io/)
