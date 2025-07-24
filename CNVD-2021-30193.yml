@@ -1,0 +1,33 @@
+id: cnvd-2021-30193
+
+info:
+  name: MySQL Error Information Disclosure
+  author: ProjectDiscoveryAI
+  severity: medium
+  description: |
+    Template to detect MySQL error information disclosure when injecting into the M_id parameter.
+  tags: sql-injection, mysql, error-based
+
+http:
+  - raw:
+      - |
+        GET /?M_id=1%27&type=product HTTP/1.1
+        Host: {{Hostname}}
+        User-Agent: Nuclei-Scanner
+        Accept: */*
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - "You have an error in your SQL syntax"
+          - "MySQL server version for the right syntax"
+          - "near '\u0027' at line"
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(sql syntax|mysql|error in your SQL)"
