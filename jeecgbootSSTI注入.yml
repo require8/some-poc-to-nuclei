@@ -2,7 +2,7 @@ id: jeecgboot-ssti-vulnerability
 
 info:
   name: JEECGBOOT SSTI Vulnerability
-  author: ProjectDiscoveryAI,dostghost
+  author: ProjectDiscoveryAI
   severity: critical
   description: |
     This template detects a potential Server-Side Template Injection (SSTI) vulnerability in the JEECGBOOT `testConnection` endpoint by sending a specially crafted payload that attempts to execute arbitrary commands.
