@@ -2,7 +2,7 @@ id: jeecg-arbitrary-file-upload
 
 info:
   name: Jeecg Arbitrary File Upload
-  author: ProjectDiscoveryAI,dostghost
+  author: ProjectDiscoveryAI
   severity: high
   description: |
     This template checks for an arbitrary file upload vulnerability in the Jeecg framework, enabling attackers to upload malicious files.
