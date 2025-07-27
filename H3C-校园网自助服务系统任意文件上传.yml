@@ -2,7 +2,7 @@ id: flexfileupload-path-traversal
 
 info:
   name: FlexFileUpload Path Traversal
-  author: ProjectDiscoveryAI,dostghost
+  author: ProjectDiscoveryAI
   severity: high
   description: |
     Exploits a path traversal vulnerability in the FlexFileUpload endpoint to upload a file and verifies the upload by attempting to access the file. fofa搜索很难再找到对应资产
