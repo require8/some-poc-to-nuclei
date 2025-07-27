@@ -2,7 +2,7 @@ id: jeecg-boot-freemarker-rce
 
 info:
   name: Jeecg-Boot Freemarker RCE
-  author: ProjectDiscoveryAI,dostghost
+  author: ProjectDiscoveryAI
   severity: critical
   description: |
     Detects a potential Freemarker Remote Code Execution (RCE) vulnerability in Jeecg-Boot.
