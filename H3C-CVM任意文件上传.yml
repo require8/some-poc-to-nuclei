@@ -2,7 +2,7 @@ id: h3c-cvm-fileupload
 
 info:
   name: H3C CVM Arbitrary File Upload Vulnerability
-  author: ProjectDiscoveryAI,dostghost
+  author: ProjectDiscoveryAI
   severity: high
   description: |
     H3C CVM file upload vulnerability allows arbitrary file upload to the server, potentially leading to remote code execution.
