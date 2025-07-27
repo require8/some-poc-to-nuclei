@@ -2,7 +2,7 @@ id: hikvision-arbitrary-file-upload
 
 info:
   name: Hikvision Comprehensive Security Management Platform Arbitrary File Upload
-  author: ProjectDiscoveryAI,dostghost
+  author: ProjectDiscoveryAI
   severity: high
   description: |
     This template checks for arbitrary file upload vulnerability in Hikvision Comprehensive Security Management Platform.
