@@ -2,7 +2,7 @@ id: h3c-secparh-login-exploit
 
 info:
   name: H3C SecParh Arbitrary User Login Exploit
-  author: ProjectDiscoveryAI,dostghost
+  author: ProjectDiscoveryAI
   severity: critical
   description: |
     This template exploits an arbitrary user login vulnerability in the H3C SecParh system. It logs in with a crafted payload and performs a subsequent request to execute commands.只有2018的系统才有可能存在该漏洞
