@@ -2,7 +2,7 @@ id: h3c-rce-dynamiccontent
 
 info:
   name: H3C User Self-Service Platform RCE (dynamiccontent.properties.xhtml)
-  author: ProjectDiscoveryAI,dostghost
+  author: ProjectDiscoveryAI
   severity: critical
   description: |
     The H3C User Self-Service Platform has a Remote Code Execution (RCE) vulnerability in `dynamiccontent.properties.xhtml`.
